@@ -16,6 +16,11 @@
         text-align: center;
       }
 
+      .text.wiki{
+        font-size: 12px;
+        color: white;
+      }
+
       input {
         font-size: 12px;
       }

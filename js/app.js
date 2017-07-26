@@ -245,6 +245,7 @@ var model = function() {
 }, self);
 
     self.marker = ko.observableArray(markers);
+    self.description = ko.observable(markers);
 
 
     self.clickMarker = function(location) {
@@ -262,12 +263,12 @@ var model = function() {
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                success: function(data) {
+                console.log(data);
                     var title = data[0];
                     var para = data[2][0];
                     var url = data[3][0];
-                    self.description = function(){
-                        ('<em>Descrição: <br> <a href="' + url + '">' + title + ' '+ para +' </a></em>');
-                    }
+                    self.description('<em>Descrição: <br> <a href="' + url + '">' + title + ' '+ para +' </a></em>');
+                    
                     
                 }
             });
