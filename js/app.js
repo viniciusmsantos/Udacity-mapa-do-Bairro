@@ -73,12 +73,14 @@ function initMap() {
         });
     }
     //aplica bindings do modelo
-    ko.applyBindings( new model() );
+    ko.applyBindings( new ViewModel() );
 
     map.fitBounds(bounds);
 
     document.getElementById('show-listings').addEventListener('click', showListings);
     document.getElementById('hide-listings').addEventListener('click', hideListings);
+
+
 
 }
 
@@ -220,7 +222,7 @@ function searchWithinPolygon() {
 }
 
 // coloca marcadores no menu lateral e filtra
-var model = function() {
+var ViewModel = function() {
     var self = this;
     self.placesList = ko.observableArray(locations);
     
@@ -257,19 +259,24 @@ var model = function() {
         
             var listItem = location.title
             var url = "https://pt.wikipedia.org/w/api.php?action=opensearch&search="+ listItem +"&format=json&callback=?"; 
-            $.ajax({
+            var jqXHR = $.ajax({
                 url: url,
                 type: 'GET',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-               success: function(data) {
-                console.log(data);
+                success: function(data) {
+                    console.log(data);
                     var title = data[0];
                     var para = data[2][0];
                     var url = data[3][0];
-                    self.description('Descrição: <br> <a href="' + url + '">' + title +":"+ ' '+ para +' </a>');
-                    
-                    
+                    self.description('Descrição: <br> <a href="' + url + '">' + title +":"+ ' '+ para +' Clique para saber mais</a>');
+                    if(para == null){
+                        self.description('Não há descrição disponivel');
+                    }
+                },
+                error: function(){
+                    console.log("Erro Nos dados wikipedia");
+                    self.description('<h2>Falha ao requisitar dados<h2>')
                 }
             });
     };
@@ -277,7 +284,7 @@ var model = function() {
 
 // Função de erro  
 function googleError() {
-  alert("Map did not load");  
+  alert("Falha ao carregar o mapa");  
 }
 
-      
+     
