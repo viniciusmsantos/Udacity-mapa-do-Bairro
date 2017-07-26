@@ -1,6 +1,4 @@
-var map,
-    largeInfowindow;
-
+var map, largeInfowindow;
 //variaveis para os pontos no mapa
 var markers = [];
 var polygon = null;
@@ -11,13 +9,13 @@ var locations = [
           {title: 'Museu Monteiro Lobato', location: {lat: -23.022231, lng: -45.564466}},
           {title: 'Museu Mazzaropi',location: {lat: -23.045272, lng: -45.528572}},
           {title: 'Museu de História Natural', location: {lat: -23.0156914, lng: -45.5364608}},
-          {title: 'Parque Vale do Itaim',location: {lat: -23.0372505, lng: -45.5338063}},
+          {title: 'Parque vale do Itaim taubaté - sp',location: {lat: -23.0372505, lng: -45.5338063}},
           {title: 'Cristo Redentor',location: {lat: -23.036121, lng: -45.546443}}
         ];
 
 function initMap() {
 
-// estliza mapa
+// estiliza mapa
     var styles = [
     {"featureType": "poi.park","elementType": "geometry.fill","stylers": [{"color": "#f0f1d9"}]},
     {"featureType": "poi.school","elementType": "geometry.fill","stylers": [{"color": "#f0f1d9"}]},
@@ -74,7 +72,7 @@ function initMap() {
             this.setIcon(defaultIcon);
         });
     }
-
+    //aplica bindings do modelo
     ko.applyBindings( new model() );
 
     map.fitBounds(bounds);
@@ -120,6 +118,8 @@ function populateInfoWindow(marker, infowindow) {
                 '<div>No Street View Found</div>');
             }
           }
+
+
           // Use streetview service to get the closest streetview image within
           // 50 meters of the markers position
           streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
@@ -127,6 +127,7 @@ function populateInfoWindow(marker, infowindow) {
           infowindow.open(map, marker);
         }
       }
+
 
 
 function showListings() {
@@ -228,8 +229,10 @@ var model = function() {
     });
 
     self.query = ko.observable('');
-    self.filteredPlaces = ko.computed(function() { console.log(location)
-    return ko.utils.arrayFilter(self.placesList(), function(location) { console.log(location)
+    self.filteredPlaces = ko.computed(function() {
+     console.log(location)
+    return ko.utils.arrayFilter(self.placesList(), function(location) { 
+        console.log(location)
         if (location.title.toLowerCase().indexOf(self.query().toLowerCase()) >= 0) {
             location.marker.setVisible(true);
             return true;
@@ -243,12 +246,31 @@ var model = function() {
 
     self.marker = ko.observableArray(markers);
 
+
     self.clickMarker = function(location) {
         populateInfoWindow(location.marker, largeInfowindow);
         location.marker.setAnimation(google.maps.Animation.BOUNCE);
         window.setTimeout(function() {
           location.marker.setAnimation(null);
         }, 750);
+        
+            var listItem = location.title
+            var url = "https://pt.wikipedia.org/w/api.php?action=opensearch&search="+ listItem +"&format=json&callback=?"; 
+            $.ajax({
+                url: url,
+                type: 'GET',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+               success: function(data) {
+                    var title = data[0];
+                    var para = data[2][0];
+                    var url = data[3][0];
+                    self.description = function(){
+                        ('<em>Descrição: <br> <a href="' + url + '">' + title + ' '+ para +' </a></em>');
+                    }
+                    
+                }
+            });
     };
 }
 
