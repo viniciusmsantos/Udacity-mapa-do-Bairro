@@ -9,8 +9,8 @@ var locations = [
           {title: 'Museu Monteiro Lobato', location: {lat: -23.022231, lng: -45.564466}},
           {title: 'Museu Mazzaropi',location: {lat: -23.045272, lng: -45.528572}},
           {title: 'Museu de História Natural', location: {lat: -23.0156914, lng: -45.5364608}},
-          {title: 'Parque vale do Itaim taubaté - sp',location: {lat: -23.0372505, lng: -45.5338063}},
-          {title: 'Cristo Redentor',location: {lat: -23.036121, lng: -45.546443}}
+          {title: 'Parque vale do Itaim',location: {lat: -23.0372505, lng: -45.5338063}},
+          {title: 'Cristo Redentor(Taubaté)',location: {lat: -23.036121, lng: -45.546443}}
         ];
 
 function initMap() {
@@ -245,7 +245,7 @@ var model = function() {
 }, self);
 
     self.marker = ko.observableArray(markers);
-    self.description = ko.observable(markers);
+    self.description = ko.observable('');
 
 
     self.clickMarker = function(location) {
@@ -267,7 +267,7 @@ var model = function() {
                     var title = data[0];
                     var para = data[2][0];
                     var url = data[3][0];
-                    self.description('<em>Descrição: <br> <a href="' + url + '">' + title + ' '+ para +' </a></em>');
+                    self.description('Descrição: <br> <a href="' + url + '">' + title +":"+ ' '+ para +' </a>');
                     
                     
                 }

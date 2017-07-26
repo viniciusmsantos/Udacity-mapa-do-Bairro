@@ -11,21 +11,34 @@
         position: relative;
       }
       .wikiApi{
-        color: #fbc11b;
-        
+        color: white;
+        width: 325px;
         text-align: center;
       }
 
-      .text.wiki{
-        font-size: 12px;
+     
+
+      a{
         color: white;
+        list-style: none;
+        text-decoration: none;
+      }
+
+      a:link{
+        color: white;
+      }
+
+      a:hover{
+        color: gray;
       }
 
       input {
         font-size: 12px;
       }
 
-      h1 {
+      
+
+      h1,h3 {
         color: #fbc11b;
         font-size: 22px;
         margin: 0 0 10px 0;
@@ -62,7 +75,4 @@
         font-size: 12px;
       }
 
-      a{
-        color: #fbc11b;
-        list-style-type: none;
-      }   
+       

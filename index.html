@@ -26,9 +26,10 @@
           <ul data-bind="foreach:filteredPlaces">
             <a href="#"><li class="list-item" data-bind="text:title, click:$root.clickMarker"></li></a>
           </ul>
+         
           <div class="wikiApi">
             <h3>Wiki</h3>
-          <div data-bind="html: $root.description"></div>
+          <div class="text-wiki" data-bind="html: $root.description"></div>
     </div>
 
     </div>
