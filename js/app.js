@@ -4,6 +4,7 @@ var markers = [];
 var polygon = null;
 var placeMarkers = [];
 
+
 // array de locais
 var locations = [
           {title: 'Museu Monteiro Lobato', location: {lat: -23.022231, lng: -45.564466}},
@@ -44,7 +45,7 @@ function initMap() {
     var defaultIcon = makeMarkerIcon('fbc11b');
 
 // estiliza macardor no mouseover
-    var highlightedIcon = makeMarkerIcon('FFD79C');
+    var highlightedIcon = makeMarkerIcon('FF4500');
 
 // animação de marcadores ao iniciar o mapa
     for (var i = 0; i < locations.length; i++) {
@@ -63,6 +64,7 @@ function initMap() {
         bounds.extend(marker.position);
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
+            viewModel.clickMarker(location[i]);
             // console.log('click');
         });
         marker.addListener('mouseover', function() {
@@ -73,7 +75,8 @@ function initMap() {
         });
     }
     //aplica bindings do modelo
-    ko.applyBindings( new ViewModel() );
+    var viewModel = new ViewModel();
+    ko.applyBindings(viewModel);
 
     map.fitBounds(bounds);
 
@@ -173,7 +176,6 @@ function createMarkersForPlaces(places) {
             title: place.name,
             position: place.geometry.location,
             id: place.id
-
         });
 
 // Cria infowindow
@@ -196,6 +198,7 @@ function createMarkersForPlaces(places) {
             bounds.extend(place.geometry.location);
         }
     }
+
     map.fitBounds(bounds);
 }
 
@@ -250,13 +253,17 @@ var ViewModel = function() {
     self.description = ko.observable('');
 
 
+
+
     self.clickMarker = function(location) {
         populateInfoWindow(location.marker, largeInfowindow);
+        infoWiki();
         location.marker.setAnimation(google.maps.Animation.BOUNCE);
         window.setTimeout(function() {
           location.marker.setAnimation(null);
-        }, 750);
+        }, 1000);
         
+            function infoWiki(){
             var listItem = location.title
             var url = "https://pt.wikipedia.org/w/api.php?action=opensearch&search="+ listItem +"&format=json&callback=?"; 
             var jqXHR = $.ajax({
@@ -279,12 +286,12 @@ var ViewModel = function() {
                     self.description('<h2>Falha ao requisitar dados<h2>')
                 }
             });
+        };
     };
+
 }
 
 // Função de erro  
 function googleError() {
   alert("Falha ao carregar o mapa");  
 }
-
-     
