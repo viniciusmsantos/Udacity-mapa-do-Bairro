@@ -48,6 +48,8 @@ function initMap() {
     var highlightedIcon = makeMarkerIcon('FF4500');
 
 // animação de marcadores ao iniciar o mapa
+
+
     for (var i = 0; i < locations.length; i++) {
         var position = locations[i].location;
         var title = locations[i].title;
@@ -62,10 +64,9 @@ function initMap() {
         });
         markers.push(marker);
         bounds.extend(marker.position);
-        marker.addListener('click', function() {
+        marker.addListener('click', function markerClicked() {
             populateInfoWindow(this, largeInfowindow);
-            viewModel.clickMarker(location[i]);
-            // console.log('click');
+            console.log('click');
         });
         marker.addListener('mouseover', function() {
             this.setIcon(highlightedIcon);
@@ -74,6 +75,7 @@ function initMap() {
             this.setIcon(defaultIcon);
         });
     }
+
     //aplica bindings do modelo
     var viewModel = new ViewModel();
     ko.applyBindings(viewModel);
@@ -155,6 +157,7 @@ function hideListings() {
         markers[i].setMap(null);
     }
 }
+
 
 // Cria marcadores para cada lugar 
 function createMarkersForPlaces(places) {
@@ -261,7 +264,7 @@ var ViewModel = function() {
         location.marker.setAnimation(google.maps.Animation.BOUNCE);
         window.setTimeout(function() {
           location.marker.setAnimation(null);
-        }, 1000);
+        }, 3000);
         
             function infoWiki(){
             var listItem = location.title
