@@ -64,10 +64,23 @@ function initMap() {
         });
         markers.push(marker);
         bounds.extend(marker.position);
-        marker.addListener('click', function markerClicked() {
+        marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
-            console.log('click');
+            toggleBounce(this);
+            //console.log('click');
         });
+
+        function toggleBounce(marker) {
+            if (marker.getAnimation() !== null) {
+              marker.setAnimation(null);
+            } else {
+              marker.setAnimation(google.maps.Animation.BOUNCE);
+              setTimeout(function() {
+                marker.setAnimation(null)
+                }, 2000);
+            }
+        }   
+        
         marker.addListener('mouseover', function() {
             this.setIcon(highlightedIcon);
         });
@@ -133,6 +146,9 @@ function populateInfoWindow(marker, infowindow) {
           // Open the infowindow on the correct marker.
           infowindow.open(map, marker);
         }
+        marker.addListener('click', function(){
+            //console.log('click');
+        });
       }
 
 
@@ -185,7 +201,7 @@ function createMarkersForPlaces(places) {
         var placeInfoWindow = new google.maps.InfoWindow();
         
         marker.addListener('click', function() {
-          // console.log('click');
+          console.log('click');
             if (placeInfoWindow.marker == this) {
                 console.log("This infowindow already is on this marker");
             } else {
@@ -207,8 +223,7 @@ function createMarkersForPlaces(places) {
 
 function makeMarkerIcon(markerColor) {
     var markerImage = new google.maps.MarkerImage(
-        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor +
-        '|40|_|%E2%80%A2',
+        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor + '|40|_|%E2%80%A2',
         new google.maps.Size(21, 34),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34),
@@ -262,6 +277,7 @@ var ViewModel = function() {
         populateInfoWindow(location.marker, largeInfowindow);
         infoWiki();
         location.marker.setAnimation(google.maps.Animation.BOUNCE);
+        
         window.setTimeout(function() {
           location.marker.setAnimation(null);
         }, 3000);
@@ -279,7 +295,7 @@ var ViewModel = function() {
                     var title = data[0];
                     var para = data[2][0];
                     var url = data[3][0];
-                    self.description('Descrição: <br> <a href="' + url + '">' + title +":"+ ' '+ para +' Clique para saber mais</a>');
+                    self.description('Descrição: <br> <a href="' + url + '">' + title +":"+ ' '+ para +' </br> (Clique para saber mais)</a>');
                     if(para == null){
                         self.description('Não há descrição disponivel');
                     }
