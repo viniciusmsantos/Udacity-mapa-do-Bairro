@@ -67,6 +67,7 @@ function initMap() {
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
             toggleBounce(this);
+            viewModel.clickMarker(location[i]);
             //console.log('click');
         });
 
