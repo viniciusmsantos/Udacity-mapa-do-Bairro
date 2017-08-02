@@ -50,24 +50,23 @@ function initMap() {
 // animação de marcadores ao iniciar o mapa
 
 
-    for (var i = 0; i < locations.length; i++) {
-        var position = locations[i].location;
-        var title = locations[i].title;
+    locations.forEach(function(location) { 
+        var position = location.location;
+        var title = location.title;
         var marker = new google.maps.Marker({
             map: map,
             position: position,
             title: title,
             icon: defaultIcon,
             animation: google.maps.Animation.DROP,
-            description: locations[i].description,
-            id: i
+            description: location.description,
         });
         markers.push(marker);
         bounds.extend(marker.position);
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
             toggleBounce(this);
-            viewModel.clickMarker(location[i]);
+            viewModel.clickMarker(location);
             //console.log('click');
         });
 
@@ -88,7 +87,7 @@ function initMap() {
         marker.addListener('mouseout', function() {
             this.setIcon(defaultIcon);
         });
-    }
+    });
 
     //aplica bindings do modelo
     var viewModel = new ViewModel();
